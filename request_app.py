@@ -6,8 +6,12 @@ app = Flask(__name__)
 
 @app.route("/")
 @app.route("/request-counter")
-def request_counter(method='GET'):
-    return 'hello'
+def request_counter(method=['GET', 'POST']):
+    counter = 1
+    if request.method == 'GET':
+        counter += 1
+        query_db("""INSERT INTO request_counter (GET) VALUES ({})""".format(counter))
+    return str(query_db("""SELECT id FROM request_counter"""))
 
 
 DATABASE = 'database.db'
